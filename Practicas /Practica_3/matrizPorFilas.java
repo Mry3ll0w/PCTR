@@ -52,7 +52,7 @@ public class matrizPorFilas
     //System.out.println("\n");
     //printMatriz(matrixx);
     System.out.println("Estabilizamos los cores durante unos segundos... e insinuamos a la JVM que limpie...");
-    System.gc();
+    System.gc();//Pasa el recolector de basura y se elimine residuos
     Thread mainThread=Thread.currentThread();
     mainThread.sleep(6000);
     //procesamiento con cuatro tareas...
