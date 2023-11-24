@@ -13,7 +13,7 @@ class PCMonitor {
 		Buffer[Newest] = V;
 		Newest = (Newest + 1) % N;
 		Count = Count + 1;
-		notifyAll();//Siempre hay que realizar el notifyAll pq no tenemos variables de cond
+		notifyAll();//Siempre hay que realizar el notifyAll pq no tenemos variables de cond, tenemos cola wait set
 	}
 
 	synchronized int Take() {//Wait
