@@ -21,11 +21,11 @@ public class primosParalelos {
 
     long inicTiempo = System.nanoTime();  
     ThreadPoolExecutor ept = new ThreadPoolExecutor(
-      nTareas,
-      nTareas,
-      0L,
-      TimeUnit.MILLISECONDS,
-      new LinkedBlockingQueue<Runnable>());
+      nTareas,//numero minimo de hilos
+      nTareas,//numero maximo de hilos
+      0L,//KeepAlive
+      TimeUnit.MILLISECONDS,//Unidad de tiempo
+      new LinkedBlockingQueue<Runnable>());//Cola de trabajo
 
     for(int i=0; i<nTareas; i++){
       contParciales.add(ept.submit(
@@ -36,9 +36,7 @@ public class primosParalelos {
     for(Future<Long> iterador:contParciales)
       try{
       	  primosTotal +=  iterador.get();//Get pilla el objeto Future para cogerlo cuando este.
-      }catch (CancellationException e){}
-       catch (ExecutionException e){}
-       catch (InterruptedException e){}
+      }catch (Exception e){}
 
     long tiempoTotal = (System.nanoTime()-inicTiempo)/(long)1.0e9;   
     ept.shutdown();
