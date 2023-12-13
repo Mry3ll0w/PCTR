@@ -4,31 +4,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class cCRL {
     
     public static void main(String args[]){
-        /* RLockCuenta cuenta = new RLockCuenta();
-
-        // Crear 5 hebras depositantes
-        for (int i = 0; i < 5; i++) {
-            new Thread(() -> {
-                for (int j = 0; j < 10; j++) {
-                    cuenta.depositar(10.0);
-                    System.out.println("Depositado 10.0, saldo total: " + cuenta.dSaldoTotal);
-                }
-            }).start();
-        }
-
-        // Crear 5 hebras reintegrantes
-        for (int i = 0; i < 5; i++) {
-            new Thread(() -> {
-                for (int j = 0; j < 10; j++) {
-                    try {
-                        cuenta.sacarDinero(5.0);
-                        System.out.println("Retirado 5.0, saldo total: " + cuenta.dSaldoTotal);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        } *///Codigo para comprobar el funcionamiento del problema de la cuenta de ahorros
 
     }
 
@@ -55,6 +30,7 @@ class RLockCuenta{
         try{
             while(dSaldoTotal < dCantidad)cSaldoPositivo.await();//Espera a que el saldo sea el suficiente
             dSaldoTotal-=dCantidad;
+            cSaldoPositivo.signal();
         }finally{lock.unlock();}
     }
 
@@ -81,16 +57,19 @@ class RLockImpresoras{
         }finally{lock.unlock();}
     }
 
-    public void liberarImpresora(int i){
+    public void liberarImpresora(int i) throws InterruptedException{
         if(i > 3){
             System.out.println("Esa impresora no existe");
         }
         lock.lock();// Realizamos el acceso en exclusion mutua
         try{
-            //! Preguntar Antonio Tomeu sobre como funcionan realmente las condition de reentrantlock
+            if(n == 3) cImpresorasOcupadas.await();//Nunca puede haber mas de 3 impresoras
             vbImpresorasOcupadas[i]=false;
             n++;
+            cImpresorasOcupadas.signal();//NOTIFICAR Y LIBERAR
         }finally{lock.unlock();}
     }
 
 }
+
+
