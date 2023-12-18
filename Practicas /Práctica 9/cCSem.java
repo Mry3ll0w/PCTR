@@ -20,7 +20,7 @@ class semCuentaAhorros{
 
     void sacarDinero(Double d) throws InterruptedException{
         s.acquire();
-        if(dSaldo < d) sSaldoInsuficiente.wait();
+        while(dSaldo < d) sSaldoInsuficiente.wait();
         dSaldo-=d;
         sSaldoInsuficiente.release();
         s.release();
@@ -35,7 +35,7 @@ class semImpresoras{
 
     public void pedirImpresora() throws InterruptedException {
         s.acquire();
-        if(n == 0) sImpresorasOcupadas.acquire();//wait
+        while(n == 0) sImpresorasOcupadas.acquire();//wait
         
         int iNumeroImpresora = 0;
         for(;iNumeroImpresora < 3 && !vbImpresorasOcupadas[iNumeroImpresora]; iNumeroImpresora++){}
@@ -51,7 +51,7 @@ class semImpresoras{
         if(i > 3){
             System.out.println("Esa impresora no existe");
         }
-        if(n == 3) sImpresorasOcupadas.acquire();
+        while(n == 3) sImpresorasOcupadas.acquire();
         vbImpresorasOcupadas[i]=false;
         n++;
         sImpresorasOcupadas.release();

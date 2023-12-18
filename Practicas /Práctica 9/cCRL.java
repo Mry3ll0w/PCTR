@@ -63,7 +63,7 @@ class RLockImpresoras{
         }
         lock.lock();// Realizamos el acceso en exclusion mutua
         try{
-            if(n == 3) cImpresorasOcupadas.await();//Nunca puede haber mas de 3 impresoras
+            while(n == 3) cImpresorasOcupadas.await();//Nunca puede haber mas de 3 impresoras
             vbImpresorasOcupadas[i]=false;
             n++;
             cImpresorasOcupadas.signal();//NOTIFICAR Y LIBERAR
