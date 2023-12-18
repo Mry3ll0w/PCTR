@@ -14,6 +14,10 @@ public class ClienteEjemploRMI1{
   System.out.println(RefObRemoto.Resta(a,b));	
   System.out.println(RefObRemoto.Producto(a,b));	
   System.out.println(RefObRemoto.Cociente(a,b));	
+  int v[] = RefObRemoto.leerVector(1,new int[]{1,3,4,5}, 4);
+  for(int i =0 ; i < 4; i++ ){
+    System.out.println("v["+i+"]="+v[i]);
+  }
 		
   }	
 }	

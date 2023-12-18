@@ -9,4 +9,5 @@
   int Resta(int x, int y)throws RemoteException; 
   int Producto(int x, int y)throws RemoteException; 
   float Cociente(int x, int y)throws RemoteException; 
+  public int[] leerVector(int c, int v[], int vSize) throws RemoteException;
  }	
