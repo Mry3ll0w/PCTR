@@ -33,4 +33,4 @@ public class EjemploRMI1 //! REFERENTE AL SERVIDOR
     Naming.bind("Servidor", ORemoto);
     System.out.println("Servidor Remoto Preparado");
   }	  
-}	                             
+}	                  
