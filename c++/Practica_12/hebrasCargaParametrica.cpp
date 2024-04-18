@@ -9,7 +9,7 @@ using namespace std;
 // Cerrojo siempre declaramos como global.
 std::mutex cerrojo;
 
-void hola(int cotaSuperior, int &totalHits) // codigo a ejecutar por la hebras con parametros
+void fun(int cotaSuperior, int &totalHits) // codigo a ejecutar por la hebras con parametros
 {
     int hits = 0;
     // cout << "Hola Mundo..." << this_thread::get_id() << " ";
@@ -27,7 +27,7 @@ int main()
     int totalHits = 0;
     thread hilos[nHilos];
     for (int i = 0; i < nHilos; i++)
-        hilos[i] = thread(hola, 100, std::ref(totalHits));
+        hilos[i] = thread(fun, 100, std::ref(totalHits));
     // las hebras se crean -y ejecutan de esta forma
 
     for (int i = 0; i < nHilos; i++)

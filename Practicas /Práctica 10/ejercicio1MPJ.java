@@ -10,7 +10,7 @@ public class ejercicio1MPJ {
         int emisor = 0;
         int tag = 100; int unitSize = 1;
 
-        if(rank==emisor){ 
+        if(rank== 0){ //Emisor
             
             int bufer[] = new int[2];
             bufer[0] = 4;  	 bufer[1] = 3;
@@ -19,7 +19,7 @@ public class ejercicio1MPJ {
                 MPI.COMM_WORLD.Send(bufer, 1, unitSize, MPI.INT, i, tag+i);
             }
 
-        } else if(rank==1){ 
+        } else if(rank==1){ //Receptor
             int res;
             int revbufer[] = new int[2];
             MPI.COMM_WORLD.Recv(revbufer, 0, unitSize, MPI.INT, emisor, tag+rank); 	 
@@ -32,3 +32,9 @@ public class ejercicio1MPJ {
     }
     
 };
+
+
+/*
+ * 3 Hilos
+ * 
+ */

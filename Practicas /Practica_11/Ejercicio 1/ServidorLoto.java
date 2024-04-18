@@ -11,15 +11,19 @@ public class ServidorLoto extends UnicastRemoteObject implements IServidorLoto {
     ServidorLoto() throws Exception {
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {// Ejecucion del servidor
 
         // Generamos el numero premiado una vez.
         numeros = generaNumerosPremiados();
 
         // Binding del servidor
         IServidorLoto remoto = new ServidorLoto();
-        Naming.bind("Servidor", remoto);
+
+        Naming.bind("Servidor", remoto);// El servidor tiene nombre "Servidor" y genera un objeto remoto de nombre
+                                        // remoto
+
         System.out.println("El servidor esta listo, los numeros premiados son: ");
+
         for (int i = 0; i < 6; i++) {
             System.out.println(i + 1 + " : " + numeros[i]);
         }

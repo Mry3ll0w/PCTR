@@ -7,7 +7,9 @@ public class ClienteLoto {
         // SIEMPRE debe convertirse el retorno del metodo Naming.lookup a la interfaz
         // remota
 
+        // Construimos el objeto remoto
         IServidorLoto RefObRemoto = (IServidorLoto) Naming.lookup("//localhost/Servidor");
+
         int[] apuesta = new int[6];
         apuesta[0] = 44;
         apuesta[1] = 9;
