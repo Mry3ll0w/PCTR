@@ -1,6 +1,6 @@
 import java.util.concurrent.ThreadLocalRandom;
 
-public class P1 {
+public class P2 {
     static int n = 0;// Para que sea compartida por todos
 
     public static void main(String args[]) throws Exception {
@@ -96,11 +96,11 @@ class Ejercicio2 implements Runnable {
     public void run() {
         if (bInc_) {
             for (int i = 0; i < 10000; i++) {
-                P1.n++;
+                P2.n++;
             }
         } else {
             for (int i = 0; i < 10000; i++) {
-                P1.n--;
+                P2.n--;
             }
         }
     }
