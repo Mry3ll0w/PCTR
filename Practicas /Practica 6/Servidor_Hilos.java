@@ -3,52 +3,52 @@
  *@version 1.0
 */
 
-
 import java.net.*;
 import java.io.*;
 
 public class Servidor_Hilos
-  extends Thread
-{
+        extends Thread {
     Socket enchufe;
-    public Servidor_Hilos(Socket s)
-    {enchufe = s; this.start();}
 
-    public void run()
-    {
-    try{
-        BufferedReader entrada = new BufferedReader(//Wrappers para comodidad no es requerido.
-                                    new InputStreamReader(
-                                        enchufe.getInputStream()));
-        String datos = entrada.readLine();
-        int j;
-        int i = Integer.valueOf(datos).intValue();
-        for(j=1; j<=20; j++){
-            System.out.println("El hilo "+this.getName()+" escribiendo el dato "+i);
-            sleep(1000);
+    public Servidor_Hilos(Socket s) {
+        enchufe = s;
+        this.start();
+    }
+
+    public void run() {
+        try {
+            BufferedReader entrada = new BufferedReader(// Wrappers para comodidad no es requerido.
+                    new InputStreamReader(
+                            enchufe.getInputStream()));
+            String datos = entrada.readLine();
+            int j;
+            int i = Integer.valueOf(datos).intValue();
+            for (j = 1; j <= 20; j++) {
+                System.out.println("El hilo " + this.getName() + " escribiendo el dato " + i);
+                sleep(1000);
+            }
+            enchufe.close();
+            System.out.println("El hilo " + this.getName() + "cierra su conexion...");
+        } catch (Exception e) {
+            System.out.println("Error...");
         }
-        enchufe.close();
-        System.out.println("El hilo "+this.getName()+"cierra su conexion...");
-    } catch(Exception e) {System.out.println("Error...");}
-    }//run
+    }// run
 
-public static void main (String[] args)
-{
-    int i;
-    int puerto = 2001;
-        try{
-            ServerSocket chuff = new ServerSocket (puerto, 3000);
-            //Backlog a boleo no tener en cuenta
+    public static void main(String[] args) {
+        int puerto = 2001;
+        try {
+            ServerSocket chuff = new ServerSocket(puerto, 3000);
+            // Backlog a boleo no tener en cuenta
 
-            while (true){
+            while (true) {
                 System.out.println("Esperando solicitud de conexion...");
                 Socket cable = chuff.accept();
                 System.out.println("Recibida solicitud de conexion...");
                 new Servidor_Hilos(cable);
-        }//while
-      } catch (Exception e)
-        {System.out.println("Error en sockets...");}
-}//main
+            } // while
+        } catch (Exception e) {
+            System.out.println("Error en sockets...");
+        }
+    }// main
 
-}//Servidor_Hilos
-
+}// Servidor_Hilos
