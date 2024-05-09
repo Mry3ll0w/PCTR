@@ -1,4 +1,5 @@
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -8,6 +9,9 @@ public class P8 {
 
         // Seccion pruebas Cuenta corriente
         pruebaCuentaCorriente();
+
+        // Seccion pruebas impresoras
+        pruebaImpresoras();
     }
 
     static void pruebaCuentaCorriente() {
@@ -36,6 +40,22 @@ public class P8 {
         cuenta.checkSaldo();
     }
 
+    static void pruebaImpresoras() {
+        Impresoras impresoras = new Impresoras();
+
+        ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(6, 6, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>());
+
+        // Metemos tareas en el pool de hilos
+        for (int i = 0; i < 6; i++) {
+            // Metemos en cada hilo un numero aleatorio entre 0 y 2
+            poolExecutor.submit(() -> {
+                Integer nImpresora = impresoras.usarImpresora();
+                impresoras.liberarImpresora(nImpresora);
+            });
+        }
+        poolExecutor.shutdown();
+    }
 }
 
 class CuentaCorriente {
@@ -87,7 +107,10 @@ class Impresoras {
                 .findFirst()
                 .orElse(-1);
         while (iPosicionLibre == -1) {
-            wait();
+            try {
+                wait();
+            } catch (Exception e) {
+            }
         }
         // Si index no lo es entonces se marca en uso
         _abImpresoras[iPosicionLibre] = true;
