@@ -3,6 +3,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -184,6 +185,66 @@ class ProductorConsumidor {
         _iElementosBuffer++;
         cBufferVacio.signal();
         lock.unlock();
+    }
+
+}
+
+// Ejercicio 5
+
+/*
+ * public long f(long iter){
+ * ini=activar-cronometro;
+ * for(long i=0; i<iter; i++){
+ * pre-protocolo;
+ * n++; //seccion critica
+ * post-protocolo;
+ * }
+ * fin=parar-cronometro;
+ * return(fin-ini);
+ * }
+ */
+class Cronometrado {
+
+    ReentrantLock lock = new ReentrantLock();
+
+    public static void main(String[] args) {
+
+    }
+
+    public synchronized void synchronizedCrono(final long iter) {
+        long n = 0;
+        long startTime = System.nanoTime(); // Start timer
+        for (long i = 0; i < iter; i++) {
+            n++;
+        }
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        System.out.println("Valor n synchronized " + n + " tiempo: " + duration);
+    }
+
+    public void lockCrono(final long iter) throws Exception {
+        long n = 0;
+        long startTime = System.nanoTime(); // Start timer
+        lock.lock();
+        for (long i = 0; i < iter; i++) {
+            n++;
+        }
+        lock.unlock();
+        long endTime = System.nanoTime(); // Start timer
+        System.out.println("Valor n lock " + n + " Tiempo: " + (endTime - startTime));
+    }
+
+    public void atomicCrono(final long iter) {
+
+        AtomicInteger n = new AtomicInteger(0);
+        long startTime = System.nanoTime();
+        for (long i = 0; i < iter; i++) {
+            n.incrementAndGet();
+        }
+
+        long endTime = System.nanoTime();
+        System.out.println("Valor n atomic " + n.get() + " Tiempo: " + (endTime - startTime));
+
     }
 
 }
