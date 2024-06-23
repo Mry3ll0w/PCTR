@@ -1,56 +1,60 @@
-#include <iostream>
-#include <thread>
-#include <mutex>
 #include <condition_variable>
-#include <vector>
+#include <iostream>
+#include <mutex>
+#include <ostream>
+#include <thread>
 
-class BarreraCiclica {
-    const int _limite;
-    int _enCola;
-    std::mutex _mutex;
-    std::condition_variable _cv;
+class Barrera {
+
+  // Private Vars
+  const int _iLimite;
+  int _iEsperando;
+  std::mutex _mtx; // Gestion de la exclusión mutua
+  std::condition_variable cvBarreraLlena;
 
 public:
-    BarreraCiclica(int limite) : _limite(limite), _enCola(0) {}
+  Barrera(const int limite) : _iLimite(limite), _iEsperando(0) {}
 
-    void esperar() {
-        std::unique_lock<std::mutex> lock(_mutex);
-        _enCola++;
-       
-        // ! Usamos if else en vez de while para evitar problemas de bloqueo. 
-        if (_enCola < _limite) {
-            std::cout << "Hilo esperando en la barrera\n";
-            _cv.wait(lock);
-        } else {
-            std::cout << "Barrera liberada\n";
-            _enCola = 0; // Reiniciar la barrera para su uso cíclico
-            _cv.notify_all();
-        }
-    }
+  // Espera de barrera
+  void threadToWait() {
+    std::unique_lock<std::mutex> lock(_mtx);
+    _iEsperando++;
+    // Comprobamos que no haya mas procesos esperando
+    if (_iEsperando < _iLimite) {
+      std::cout << "Proceso en espera" << std::endl;
+      cvBarreraLlena.wait(lock);
+    } else
+      liberaBarrera();
+  }
+
+  // Libera los elementos parados en la barrera
+  void liberaBarrera() {
+    // std::unique_lock<std::mutex> lock(_mtx);
+
+    cvBarreraLlena.notify_all(); // Notifica a todos ya que libera a todos los
+                                 // procesos que esperan.
+    // Llamamos 3 veces ya que tenemos 3 procesos esperando, no un único.
+
+    _iEsperando = 0;
+    std::cout << "Proceso liberado" << std::endl;
+  }
 };
 
-void hiloTrabajo(BarreraCiclica &barrera) {
-    // Simulación de trabajo antes de la barrera
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    barrera.esperar();
-    // Simulación de trabajo después de la barrera
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-}
+// Definimos la tarea del hilo
+void tareaHilo(Barrera &b) { b.threadToWait(); }
 
 int main() {
-    const int numHilos = 6;
-    const int limite = 3; // Número de hilos a esperar en la barrera
-    BarreraCiclica barrera(limite);
-    std::vector<std::thread> hilos;
 
-    for (int i = 0; i < numHilos; ++i) {
-        hilos.emplace_back(hiloTrabajo, std::ref(barrera));
-    }
+  // Definimos los Threads
+  std::vector<std::thread> hilos(6);
 
-    for (auto &hilo : hilos) {
-        hilo.join();
-    }
+  // Barrera
+  Barrera barrier(3);
 
-    return 0;
+  for (int i = 0; i < 6; i++) {
+    hilos[i] = (std::thread(tareaHilo, std::ref(barrier)));
+  }
+
+  for (auto &i : hilos)
+    i.join();
 }
-

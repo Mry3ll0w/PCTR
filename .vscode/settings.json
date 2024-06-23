@@ -54,6 +54,8 @@
 		"unordered_map": "cpp",
 		"variant": "cpp",
 		"algorithm": "cpp",
-		"condition_variable": "cpp"
-	}
+		"condition_variable": "cpp",
+		"execution": "cpp"
+	},
+	"java.debug.settings.onBuildFailureProceed": true
 }

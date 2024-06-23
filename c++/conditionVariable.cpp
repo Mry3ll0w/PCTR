@@ -20,7 +20,7 @@ void print_id(int id)
 
 void go()
 {
-    std::unique_lock<std::mutex> lck(mtx);
+    std::unique_lock<std::mutex> lck(mtx); // ~= Synchronized de Java
     ready = true;
     cv.notify_all();
 }

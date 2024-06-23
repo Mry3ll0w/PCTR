@@ -1,8 +1,6 @@
 import java.util.concurrent.ThreadLocalRandom;
 import java.rmi.server.*;
 import java.rmi.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ServidorLoto extends UnicastRemoteObject implements IServidorLoto {
 

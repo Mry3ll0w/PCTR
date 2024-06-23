@@ -45,7 +45,7 @@ struct Buffer
         int result = buffer[Out_Ptr];
         cont--;
         Out_Ptr = (Out_Ptr + 1) % tam;
-        not_full.notify_one(); // Al haberse consumido al menos tenemos un hueco.
+        not_full.notify_one(); // Al haberse consumido al menos tenemos un hueco, igual que el notify normal
         lck.unlock();
         return result;
     }
